@@ -1,5 +1,5 @@
 <template>
-  <div>words list</div>
+  <div class="text-red-500">words list</div>
 </template>
 
 <script setup lang="ts"></script>
