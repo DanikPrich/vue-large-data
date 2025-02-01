@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto w-full bg-white mb-6 shadow-sm">
+  <div class="max-w-3xl mx-auto w-full bg-white mb-6 shadow-sm">
     <WordsListHeader @search="(query) => handleSearch(query)" />
 
     <WordsList

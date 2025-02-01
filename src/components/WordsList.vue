@@ -5,19 +5,27 @@
         <img :src="LoadingIcon" alt="" class="w-[40px]" />
       </div>
       <template v-else>
-        <li
-          v-for="word in filteredWords"
-          :key="word.id"
-          class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray"
+        <RecycleScroller
+          v-if="filteredWords.length"
+          :items="filteredWords"
+          :item-size="64"
+          key-field="id"
+          class="h-[650px] overflow-y-auto"
         >
-          <span class="text-grayDark-900">{{ word.text }}</span>
-          <button
-            @click="() => emit('remove', word.id)"
-            class="text-red-500 hover:text-red-700 transition-colors"
-          >
-            <IconifyIcon icon="pajamas:remove" />
-          </button>
-        </li>
+          <template #default="{ item }">
+            <li
+              class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray mb-2"
+            >
+              <span class="text-grayDark-900">{{ item.text }}</span>
+              <button
+                @click="() => emit('remove', item.id)"
+                class="text-red-500 hover:text-red-700 transition-colors"
+              >
+                <IconifyIcon icon="pajamas:remove" />
+              </button>
+            </li>
+          </template>
+        </RecycleScroller>
         <div v-if="!filteredWords.length">
           <span>No results</span>
         </div>
@@ -28,6 +36,7 @@
 
 <script setup lang="ts">
 import { computed, type PropType } from 'vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import IconifyIcon from './icons/IconifyIcon.vue'
 import type { Word } from '@/types/Word'
 import LoadingIcon from '@/assets/images/icons/loading.svg'
