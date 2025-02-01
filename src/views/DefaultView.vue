@@ -28,12 +28,12 @@ const handleSearch = (query: string) => {
 }
 
 const handleRemoveWord = (id: number) => {
-  console.log('remove word', id)
   wordsList.value = wordsList.value.filter((word) => word.id !== id)
 }
 
 onMounted(() => {
   wordsStore.getList()
+  // wordsStore.removeListFromDatabase()
 })
 </script>
 

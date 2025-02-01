@@ -16,7 +16,7 @@
             <li
               class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray mb-2"
             >
-              <span class="text-grayDark-900">{{ item.text }}</span>
+              <span class="text-grayDark-900 capitalize">{{ item.title }}</span>
               <button
                 @click="() => emit('remove', item.id)"
                 class="text-red-500 hover:text-red-700 transition-colors"
@@ -59,7 +59,7 @@ const props = defineProps({
 
 const filteredWords = computed(() => {
   const query = props.query.toLowerCase()
-  return props.items.filter((word) => word.text.toLowerCase().includes(query))
+  return props.items.filter((word) => word.title.toLowerCase().includes(query))
 })
 </script>
 

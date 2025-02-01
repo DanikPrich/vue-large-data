@@ -1,4 +1,5 @@
 export interface Word {
   id: number
-  text: string
+  title: string
+  order: number
 }

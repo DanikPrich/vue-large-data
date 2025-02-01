@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { getTestData } from '@/api/api'
+import { getWordsList, removeAllWords } from '@/api/api'
 import type { Word } from '@/types/Word'
 
 export const useWordsStore = defineStore('words', () => {
@@ -10,8 +10,14 @@ export const useWordsStore = defineStore('words', () => {
 
   const getList = async () => {
     listLoading.value = true
-    list.value = await getTestData()
+    list.value = await getWordsList()
     listLoading.value = false
   }
-  return { list, listLoading, getList }
+
+  const removeListFromDatabase = async () => {
+    listLoading.value = true
+    list.value = await removeAllWords()
+    listLoading.value = false
+  }
+  return { list, listLoading, getList, removeListFromDatabase }
 })
