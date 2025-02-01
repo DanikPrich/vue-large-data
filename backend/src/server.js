@@ -14,14 +14,13 @@ mongoose.connect(mongoUri)
 app.use(cors())
 app.use(express.json())
 
-const testData = [
-  { id: 1, text: 'Word 1' },
-  { id: 2, text: 'Word 2' },
-  { id: 3, text: 'Word 3' },
-]
+const data = Array.from({ length: 10000 }, (_, i) => ({
+  id: i,
+  text: `Word ${i + 1}`,
+}))
 
 app.get('/api/test-data', (req, res) => {
-  res.json(testData)
+  res.json(data)
 })
 
 app.listen(port, () => {

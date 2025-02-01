@@ -6,6 +6,7 @@
       :items="wordsList"
       @remove="(id: number) => handleRemoveWord(id)"
       :query="searchQuery"
+      :loading="wordsListLoading"
     />
   </div>
 </template>
@@ -18,7 +19,7 @@ import { useWordsStore } from '@/stores/useWordsStore'
 import { storeToRefs } from 'pinia'
 
 const wordsStore = useWordsStore()
-const { list: wordsList } = storeToRefs(useWordsStore())
+const { list: wordsList, listLoading: wordsListLoading } = storeToRefs(useWordsStore())
 
 const searchQuery = ref('')
 

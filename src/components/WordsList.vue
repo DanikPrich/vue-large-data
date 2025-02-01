@@ -1,22 +1,27 @@
 <template>
   <main class="pt-6 pb-6 px-6 border border-gray border-t-0 rounded-b-xl">
     <ul class="space-y-2">
-      <li
-        v-for="word in filteredWords"
-        :key="word.id"
-        class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray"
-      >
-        <span class="text-grayDark-900">{{ word.text }}</span>
-        <button
-          @click="() => emit('remove', word.id)"
-          class="text-red-500 hover:text-red-700 transition-colors"
-        >
-          <IconifyIcon icon="pajamas:remove" />
-        </button>
-      </li>
-      <div v-if="!filteredWords.length">
-        <span>No results</span>
+      <div v-if="loading" class="flex justify-center">
+        <img :src="LoadingIcon" alt="" class="w-[40px]" />
       </div>
+      <template v-else>
+        <li
+          v-for="word in filteredWords"
+          :key="word.id"
+          class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray"
+        >
+          <span class="text-grayDark-900">{{ word.text }}</span>
+          <button
+            @click="() => emit('remove', word.id)"
+            class="text-red-500 hover:text-red-700 transition-colors"
+          >
+            <IconifyIcon icon="pajamas:remove" />
+          </button>
+        </li>
+        <div v-if="!filteredWords.length">
+          <span>No results</span>
+        </div>
+      </template>
     </ul>
   </main>
 </template>
@@ -25,6 +30,7 @@
 import { computed, type PropType } from 'vue'
 import IconifyIcon from './icons/IconifyIcon.vue'
 import type { Word } from '@/types/Word'
+import LoadingIcon from '@/assets/images/icons/loading.svg'
 
 const emit = defineEmits(['remove'])
 const props = defineProps({
@@ -35,6 +41,10 @@ const props = defineProps({
   query: {
     type: String,
     default: '',
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 })
 
