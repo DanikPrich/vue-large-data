@@ -5,28 +5,34 @@
         <img :src="LoadingIcon" alt="" class="w-[40px]" />
       </div>
       <template v-else>
-        <RecycleScroller
-          v-if="filteredWords.length"
-          :items="filteredWords"
-          :item-size="64"
-          key-field="id"
-          class="h-[650px] overflow-y-auto"
+        <VirtualList
+          v-if="!!filteredWords.length"
+          v-model="filteredWords"
+          :dataKey="'id'"
+          :handle="'.draggable-handle'"
+          style="height: 650px"
         >
-          <template #default="{ item }">
+          <template #item="{ record }">
             <li
               class="flex justify-between items-center bg-white px-4 py-3 rounded-lg border border-gray mb-2"
             >
-              <span class="text-grayDark-900 capitalize">{{ item.title }}</span>
+              <div class="flex gap-4 items-center">
+                <IconifyIcon
+                  icon="si:drag-handle-line"
+                  class="draggable-handle text-2xl text-gray-dark/70 cursor-grab active:cursor-grabbing select-none"
+                />
+                <span class="text-grayDark-900 capitalize">{{ record.title }}</span>
+              </div>
               <button
-                @click="() => emit('remove', item.id)"
+                @click="() => emit('remove', record.id)"
                 class="text-red-500 hover:text-red-700 transition-colors"
               >
                 <IconifyIcon icon="pajamas:remove" />
               </button>
             </li>
           </template>
-        </RecycleScroller>
-        <div v-if="!filteredWords.length">
+        </VirtualList>
+        <div v-else>
           <span>No results</span>
         </div>
       </template>
@@ -36,12 +42,12 @@
 
 <script setup lang="ts">
 import { computed, type PropType } from 'vue'
-import { RecycleScroller } from 'vue-virtual-scroller'
+import VirtualList from 'vue-virtual-draglist'
 import IconifyIcon from './icons/IconifyIcon.vue'
 import type { Word } from '@/types/Word'
 import LoadingIcon from '@/assets/images/icons/loading.svg'
 
-const emit = defineEmits(['remove'])
+const emit = defineEmits(['remove', 'update-order'])
 const props = defineProps({
   items: {
     type: Array as PropType<Word[]>,
@@ -57,9 +63,14 @@ const props = defineProps({
   },
 })
 
-const filteredWords = computed(() => {
-  const query = props.query.toLowerCase()
-  return props.items.filter((word) => word.title.toLowerCase().includes(query))
+const filteredWords = computed({
+  get: () => {
+    const query = props.query.toLowerCase()
+    return props.items.filter((word) => word.title.toLowerCase().includes(query))
+  },
+  set: (value) => {
+    emit('update-order', value)
+  },
 })
 </script>
 

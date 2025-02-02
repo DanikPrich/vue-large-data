@@ -17,3 +17,5 @@ export const deleteWords = async (_, res) => {
     res.status(500).json({ error: err.message })
   }
 }
+
+export const updateWords = async () => {}
