@@ -3,7 +3,6 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import wordRoutes from './routes/wordRoutes.js'
-import { generateAndSaveWords } from './services/wordService.js'
 
 dotenv.config({ path: '../.env' })
 
@@ -13,9 +12,6 @@ const mongoUri = process.env.MONGODB_URI
 
 // Connecting to MongoDB
 mongoose.connect(mongoUri)
-
-// Generating a new words
-mongoose.connection.once('open', generateAndSaveWords)
 
 // Middleware
 app.use(cors())

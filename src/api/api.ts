@@ -1,4 +1,4 @@
-import type { Word } from '@/types/Word'
+import type { IWord } from '@/types/Word'
 import axios from 'axios'
 
 const api = axios.create({
@@ -18,7 +18,7 @@ export const getWordsList = async () => {
   }
 }
 
-export const updateWordsOrder = async (newList: Word[]) => {
+export const updateWordsOrder = async (newList: IWord[]) => {
   console.log('new list API', newList)
   try {
     /* Cannot do this because request are too large - needs optimization */

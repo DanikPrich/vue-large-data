@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full sticky top-0 bg-white z-10 pt-10">
+  <header class="w-full sticky top-0 bg-white z-10 pt-5">
     <div class="px-4 py-4 sm:px-6 lg:px-6 rounded-t-xl border border-gray">
       <div class="flex gap-4">
         <SearchInput v-model="searchQuery" />

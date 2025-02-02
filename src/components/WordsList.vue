@@ -44,13 +44,13 @@
 import { computed, type PropType } from 'vue'
 import VirtualList from 'vue-virtual-draglist'
 import IconifyIcon from './icons/IconifyIcon.vue'
-import type { Word } from '@/types/Word'
+import type { IWord } from '@/types/Word'
 import LoadingIcon from '@/assets/images/icons/loading.svg'
 
 const emit = defineEmits(['remove', 'update-order'])
 const props = defineProps({
   items: {
-    type: Array as PropType<Word[]>,
+    type: Array as PropType<IWord[]>,
     default: () => [],
   },
   query: {

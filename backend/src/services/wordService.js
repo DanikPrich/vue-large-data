@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Word from '../models/Word.js'
+import uniqid from 'uniqid'
 
 // Getting random words from extend API
 export const fetchRandomWords = async () => {
@@ -12,15 +13,14 @@ export const fetchRandomWords = async () => {
   }
 }
 
-// Moving random words to Mongo database
+// Generating random words to Mongo database if DB is empty
 export const generateAndSaveWords = async () => {
   const count = await Word.countDocuments()
   if (count === 0) {
     const randomWords = await fetchRandomWords()
-    const words = randomWords.map((word, index) => ({
-      id: index + 1,
+    const words = randomWords.map((word) => ({
+      id: uniqid(),
       title: word,
-      order: index + 1,
     }))
 
     await Word.insertMany(words)
@@ -34,5 +34,6 @@ export const deleteAllWords = async () => {
 
 // Getting all words from database
 export const getAllWords = async () => {
+  await generateAndSaveWords()
   return await Word.find().sort({ order: 1 }).limit(10000)
 }

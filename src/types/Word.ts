@@ -1,5 +1,4 @@
-export interface Word {
+export interface IWord {
   id: number
   title: string
-  order: number
 }
