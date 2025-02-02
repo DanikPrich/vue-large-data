@@ -1,21 +1,26 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-
 import { getWordsList, removeAllWords } from '@/api/api'
 import type { IWord } from '@/types/Word'
+import { useStorage } from '@vueuse/core'
+import sortByOrder from '@/helpers/sortByOrder'
 
 export const useWordsStore = defineStore('words', () => {
   /* List of 10 000 words */
   const list = ref<IWord[]>([])
-  /* Compact data structure for storage in Local Store - id's in array */
-  const orders = ref<number[]>([])
   const listLoading = ref<boolean>(false)
+
+  /* Compact data structure for storage in Local Store - id's in array */
+  const localStoreOrdersList = useStorage<string[]>('WordsOrders', [])
 
   const getList = async () => {
     try {
       listLoading.value = true
-      list.value = await getWordsList()
-      setOrdersFromList(list.value)
+      const response = await getWordsList()
+      if (!localStoreOrdersList.value.length) {
+        list.value = response
+        setOrdersFromList(list.value)
+      } else list.value = sortByOrder(response, localStoreOrdersList.value)
     } catch (error) {
       console.error(error)
     } finally {
@@ -24,7 +29,7 @@ export const useWordsStore = defineStore('words', () => {
   }
 
   const updateOrder = async (newList: IWord[]) => {
-    /* Needs optimization */
+    /* Needs optimization to pushing to the Data base */
     // list.value = await updateWordsOrder(newOrder)
 
     setOrdersFromList(newList)
@@ -37,6 +42,7 @@ export const useWordsStore = defineStore('words', () => {
       const response = await removeAllWords()
       console.log(response?.message)
       list.value = []
+      localStoreOrdersList.value = []
     } catch (error) {
       console.error(error)
     } finally {
@@ -45,10 +51,13 @@ export const useWordsStore = defineStore('words', () => {
   }
 
   const setOrdersFromList = (newList: IWord[]) => {
-    console.log(JSON.stringify(newList))
-    orders.value = newList.map((word) => word.id)
-    console.log(JSON.stringify(orders.value))
+    localStoreOrdersList.value = newList.map((word) => word.id)
+
+    /* ~860kB */
+    // console.log(JSON.stringify(newList))
+    /* ~180kB - 680kB less in LocalStorage */
+    // console.log(JSON.stringify(orders.value))
   }
 
-  return { list, listLoading, orders, getList, updateOrder, removeListFromDatabase }
+  return { list, listLoading, getList, updateOrder, removeListFromDatabase }
 })
